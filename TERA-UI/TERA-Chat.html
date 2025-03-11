@@ -89,6 +89,20 @@ Humor
 
   <script>
 
+window.addEventListener("DOMContentLoaded", function() {
+localStorage.setItem("BennyAuthn1", "true");
+//localStorage.removeItem("BennyBan01");
+// 28/02/2025
+var Verified = localStorage.getItem("BennyAuthn1");
+if (!Verified) {
+  window.location.href = "https://bulamabenjamin.website";
+  //alert("Not Verified!");
+} else {
+  //alert("Verified!");
+}
+});
+
+
 var selectModel = document.querySelector(".select-model-div");
 var teraTopH = document.getElementById("tera-top-h");
 
@@ -217,7 +231,6 @@ window.onload = function () {
 };
 
 
-
 let chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
 
 function displayMessages() {
@@ -272,6 +285,33 @@ function setStarterMessage(message) {
 }
 
 window.onload = displayMessages;
+
+
+document.getElementById("menu-svg").addEventListener("click", function() {
+  let chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+  let chatBox = document.getElementById("chatBox");
+
+if (chatHistory.length > 0) {
+  let confirmDelete = confirm("Do you want to delete the last message?");
+
+if (confirmDelete) {
+  chatHistory.pop(); // Remove last message from localStorage
+  localStorage.setItem("chatHistory", JSON.stringify(chatHistory)); 
+
+// Remove last message from DOM
+  let messages = chatBox.getElementsByClassName("message");
+if (messages.length > 0) {
+  chatBox.removeChild(messages[messages.length - 1]); 
+}
+
+// If chat is empty, show placeholder text
+if (chatHistory.length === 0) {
+  document.getElementById("emptyChat").style.display = "block";
+  document.querySelector(".messages").style.display = "none";
+}
+}
+}
+});
 
   </script>
 
