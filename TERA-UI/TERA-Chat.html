@@ -77,6 +77,13 @@ Humor
 </button>
   </div>
 
+  <div class="humor-button-div">
+<button class="think-btn">
+<img src="Images/Bulb.svg" id="think-svg">
+Think
+</button>
+  </div>
+
   <div class="send-button-div">
 <button class="send-btn" onclick="sendMessage()" disabled>
 <img src="Images/Arrow-Up.svg" id="arrow-svg">
@@ -148,6 +155,28 @@ if (!isClicked) {
   isClicked = false;
 }
 });
+
+
+var thinkButton = document.querySelector(".think-btn");
+var thinkSvg = document.getElementById("think-svg");
+
+var isClicked2 = false;
+thinkButton.addEventListener("click", function() {
+if (!isClicked2) {
+  thinkButton.style.border = "1px solid #3C3C3C";
+  thinkButton.style.color = "#B4B4B4";
+  thinkButton.style.backgroundColor = "transparent";
+  thinkSvg.src = "Images/Bulb-Light.svg";
+  isClicked2 = true;
+} else {
+  thinkButton.style.border = "none";
+  thinkButton.style.color = "#58A5EB";
+  thinkButton.style.backgroundColor = "#294A6D";
+  thinkSvg.src = "Images/Bulb.svg";
+  isClicked2 = false;
+}
+});
+
 
 document.getElementById("messageInput").addEventListener("focus", function () {
   let input = this;
@@ -266,6 +295,22 @@ if (!text) return;
   //let cleanText = text.replace(/^(Benny:|TERA:)\s?/, "").trim();
   let cleanText = text.replace(/^(Benny:|TERA:)\s?/, "").trim().replace(/\n/g, "<br>");
 
+//====================
+// AUTO-REPLY FILTER
+//====================
+
+
+// You can // this out to disable the check
+if (sender === "Benny" && !text.startsWith("Benny: Hey Dear")) {
+  chatHistory.push({ sender, text: cleanText });
+  chatHistory.push({ sender: "TERA", text: "<b>The server is busy with other tasks right now. Please try again later.</b>" });
+  localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+  input.value = "";
+  displayMessages();
+  return;
+}
+
+
   chatHistory.push({ sender, text: cleanText }); // ✅ FIXED: No duplicate sender name
   localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
 
@@ -288,30 +333,32 @@ window.onload = displayMessages;
 
 
 document.getElementById("menu-svg").addEventListener("click", function() {
-  let chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
-  let chatBox = document.getElementById("chatBox");
-
 if (chatHistory.length > 0) {
   let confirmDelete = confirm("Do you want to delete the last message?");
 
 if (confirmDelete) {
-  chatHistory.pop(); // Remove last message from localStorage
-  localStorage.setItem("chatHistory", JSON.stringify(chatHistory)); 
-
-// Remove last message from DOM
-  let messages = chatBox.getElementsByClassName("message");
-if (messages.length > 0) {
-  chatBox.removeChild(messages[messages.length - 1]); 
-}
-
-// If chat is empty, show placeholder text
-if (chatHistory.length === 0) {
-  document.getElementById("emptyChat").style.display = "block";
-  document.querySelector(".messages").style.display = "none";
-}
+  chatHistory.pop(); // Remove last message from global chatHistory
+  localStorage.setItem("chatHistory", JSON.stringify(chatHistory)); // Update localStorage
+  displayMessages(); // Refresh UI
 }
 }
 });
+
+
+/*
+function formatText(text) {
+  return text
+.replace(/\*b\*(.*?)\*b\*///g, "<b>$1</b>")   // Bold
+//.replace(/\*i\*(.*?)\*i\*/g, "<i>$1</i>")   // Italic
+//.replace(/\*bi\*(.*?)\*bi\*/g, "<b><i>$1</i></b>"); // Bold Italic
+//}
+/*
+function sendFormattedMessage() {
+  let input = document.getElementById("messageInput").value;
+  let formattedMessage = formatText(input);
+  document.getElementById("chatBox").innerHTML += `<p>${formattedMessage}</p>`;
+}
+*/
 
   </script>
 

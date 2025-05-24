@@ -250,8 +250,32 @@ button {
   width: 13px;
   transition: fill 0.3s ease;
 }
-
 .humor-btn:disabled {
+  border: 1px solid #3C3C3C;
+  color: #B4B4B4;
+  background-color: transparent;
+}
+
+.think-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  width: 85px;
+  height: 32px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  color: #58A5EB;
+  background-color: #294A6D;
+}
+#think-svg {
+  width: 18px;
+  transition: fill 0.3s ease;
+}
+.think-btn:disabled {
   border: 1px solid #3C3C3C;
   color: #B4B4B4;
   background-color: transparent;
